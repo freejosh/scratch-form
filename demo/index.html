@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>scratch-form</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+  <h1>scratch-form</h1>
+  <div id="container">
+    <form id="form">
+    </form>
+    <textarea id="data"></textarea>
+  </div>
+  <script src="main.js"></script>
+  <script>
+    const textarea = document.getElementById('data');
+    const data = new ScratchForm(document.getElementById('form'), () => {
+      textarea.value = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

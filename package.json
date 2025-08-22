@@ -1,0 +1,14 @@
+{
+  "name": "scratch-form",
+  "version": "0.1.0",
+  "author": "Josh Freeman <freejosh@gmail.com>",
+  "private": true,
+  "scripts": {
+    "build": "NODE_ENV=production node build.mjs",
+    "dev": "node build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "esbuild-plugin-clean": "^1.0.1"
+  }
+}

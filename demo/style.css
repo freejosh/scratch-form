@@ -1,0 +1,33 @@
+body {
+  margin: 50px;
+  padding: 0;
+}
+
+* {
+  font-family: monospace;
+}
+
+h1 {
+  text-align: center;
+}
+
+#container {
+  display: flex;
+  justify-content: center;
+  align-content: stretch;
+  gap: 20px;
+  min-height: 500px;
+}
+
+#form, #data {
+  flex: 0 1 50%;
+  max-width: 500px;
+}
+
+#form {
+
+}
+
+#data {
+
+}
