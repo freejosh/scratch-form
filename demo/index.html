@@ -10,15 +10,31 @@
   <h1>scratch-form</h1>
   <div id="container">
     <form id="form">
+      <fieldset>
+        <legend>my-form</legend>
+        <label>
+          string: <input name="string" value="initial value" />
+        </label>
+        <label>
+          number: <input name="number" type="number" />
+        </label>
+      </fieldset>
     </form>
-    <textarea id="data"></textarea>
+    <textarea id="data" readonly></textarea>
   </div>
   <script src="main.js"></script>
   <script>
     const textarea = document.getElementById('data');
-    const data = new ScratchForm(document.getElementById('form'), () => {
-      textarea.value = JSON.stringify(data, null, 2);
+    const data = new ScratchForm(document.getElementById('form'), {
+      onChange(name, value, obj, node) {
+        textarea.value = JSON.stringify(obj, null, 2);
+      },
     });
+    textarea.value = JSON.stringify(data, null, 2);
+
+    setInterval(() => {
+      data.number = Math.floor(Math.random() * 1000);
+    }, 1000);
   </script>
 </body>
 </html>

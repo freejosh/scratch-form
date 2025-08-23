@@ -28,6 +28,10 @@ h1 {
 
 }
 
-#data {
+label {
+  display: block;
+}
 
+#data {
+  resize: none;
 }
