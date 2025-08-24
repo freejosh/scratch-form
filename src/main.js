@@ -41,6 +41,9 @@ function ScratchForm(formElement, options = {}) {
   // bind handler to form
   formElement.addEventListener('change', (e) => {
     const { name, value } = e.target;
+    if (!name) {
+      return;
+    }
     proxy[`${PREFIX}${name}`] = { value, node: e.target };
   });
 
