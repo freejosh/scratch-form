@@ -1,5 +1,26 @@
 const PREFIX = '_sf_';
 
+function setObjectValue(obj, name, value) {
+  obj[name] = value;
+}
+
+function getNodeValue(node) {
+  if (node.type === 'checkbox') {
+    return node.checked ? node.value : undefined;
+  }
+
+  return node.value;
+}
+
+function setNodeValue(node, value) {
+  if (node.type === 'checkbox') {
+    node.checked = Boolean(value);
+    return;
+  }
+
+  node.value = value;
+}
+
 function ScratchForm(formElement, options = {}) {
   const {
     onChange,
@@ -20,11 +41,11 @@ function ScratchForm(formElement, options = {}) {
         // change came from object - set value on form
         node = formElement.querySelector(`[name="${name}"]`);
         if (node) {
-          node.value = rawValue;
+          setNodeValue(node, rawValue);
         }
       }
 
-      obj[name] = value;
+      setObjectValue(obj, name, value);
       onChange(name, value, obj, node);
 
       return true;
@@ -33,18 +54,23 @@ function ScratchForm(formElement, options = {}) {
 
   const proxy = new Proxy(data, handler);
 
-  // initialize with current form values
-  Array.from(formElement.querySelectorAll('[name]')).forEach((el) => {
-    proxy[el.name] = el.value;
-  });
-
-  // bind handler to form
-  formElement.addEventListener('change', (e) => {
-    const { name, value } = e.target;
+  function onNodeChange(node) {
+    const { name } = node;
     if (!name) {
       return;
     }
-    proxy[`${PREFIX}${name}`] = { value, node: e.target };
+
+    const value = getNodeValue(node);
+
+    proxy[`${PREFIX}${name}`] = { value, node };
+  }
+
+  // initialize with current form values
+  Array.from(formElement.querySelectorAll('[name]')).forEach(onNodeChange);
+
+  // bind handler to form
+  formElement.addEventListener('change', (e) => {
+    onNodeChange(e.target);
   });
 
   return proxy;
