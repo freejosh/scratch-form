@@ -12,11 +12,96 @@
     <form id="form">
       <fieldset>
         <legend>my-form</legend>
+
+        <fieldset name="random-number">
+          <legend>random number</legend>
+          <label>
+            number: <input type="number" name="number" />
+          </label>
+          <label>
+            range: 0 <input type="range" name="range" min="0" max="1000" /> 1000
+          </label>
         <label>
-          string: <input name="string" value="initial value" />
+          interval:
+          <select name="interval">
+            <option value="100">0.1 seconds</option>
+            <option value="500">0.5 seconds</option>
+            <option value="1000" selected>1 second</option>
+            <option value="2000">2 seconds</option>
+          </select>
+        </label>
+          <label>
+            active: <input type="checkbox" name="toggle" value="on" />
+          </label>
+        </fieldset>
+
+        <label>
+          button: <input type="button" value="button" />
+        </label>
+
+        <label>
+          color: <input type="color" name="color" />
         </label>
         <label>
-          number: <input name="number" type="number" />
+          date: <input type="date" name="date" />
+        </label>
+        <label>
+          datetime-local: <input type="datetime-local" name="datetime-local" />
+        </label>
+        <label>
+          email: <input type="email" name="email" />
+        </label>
+        <label>
+          file: <input type="file" name="file" />
+        </label>
+        <label>
+          hidden: <input type="hidden" name="hidden" />
+        </label>
+        <label>
+          month: <input type="month" name="month" />
+        </label>
+        <label>
+          password: <input type="password" name="password" />
+        </label>
+        <label>
+          radio: <input type="radio" name="radio" />
+        </label>
+        <label>
+          reset: <input type="reset" name="reset" />
+        </label>
+        <label>
+          search: <input type="search" name="search" />
+        </label>
+        <label>
+          submit: <input type="submit" name="submit" />
+        </label>
+        <label>
+          tel: <input type="tel" name="tel" />
+        </label>
+        <label>
+          text: <input type="text" name="string" value="initial value" />
+        </label>
+        <label>
+          time: <input type="time" name="time" />
+        </label>
+        <label>
+          url: <input type="url" name="url" />
+        </label>
+        <label>
+          week: <input type="week" name="week" />
+        </label>
+        <label>
+          datalist:
+          <input list="data-list" name="list" />
+          <datalist id="data-list">
+            <option value="Option 1" />
+            <option value="Option 2" />
+          </datalist>
+        </label>
+
+        <label>
+          textarea:
+          <textarea name="textarea"></textarea>
         </label>
       </fieldset>
     </form>
@@ -24,17 +109,32 @@
   </div>
   <script src="main.js"></script>
   <script>
+    let data;
+
+    let interval;
+    function startInterval() {
+      interval = setInterval(() => {
+        data.number = Math.floor(Math.random() * data.range);
+      }, data.interval);
+    }
+    function stopInterval() {
+      clearInterval(interval);
+    }
+
     const textarea = document.getElementById('data');
-    const data = new ScratchForm(document.getElementById('form'), {
+    data = new ScratchForm(document.getElementById('form'), {
       onChange(name, value, obj, node) {
+        if (name === 'toggle') {
+          if (value) {
+            startInterval();
+          } else {
+            stopInterval();
+          }
+        }
+
         textarea.value = JSON.stringify(obj, null, 2);
       },
     });
-    textarea.value = JSON.stringify(data, null, 2);
-
-    setInterval(() => {
-      data.number = Math.floor(Math.random() * 1000);
-    }, 1000);
   </script>
 </body>
 </html>
