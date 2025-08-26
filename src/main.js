@@ -65,12 +65,21 @@ function ScratchForm(formElement, options = {}) {
     proxy[`${PREFIX}${name}`] = { value, node };
   }
 
+  function resetData() {
+    Array.from(formElement.querySelectorAll('[name]')).forEach(onNodeChange);
+  }
+
   // initialize with current form values
-  Array.from(formElement.querySelectorAll('[name]')).forEach(onNodeChange);
+  resetData();
 
   // bind handler to form
   formElement.addEventListener('change', (e) => {
     onNodeChange(e.target);
+  });
+
+  formElement.addEventListener('reset', () => {
+    // wait for form element values to actually change
+    setTimeout(resetData, 0);
   });
 
   return proxy;
