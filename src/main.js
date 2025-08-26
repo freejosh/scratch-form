@@ -16,6 +16,10 @@ function getNodeValue(node) {
     return parseFloat(value);
   }
 
+  if (type === 'file') {
+    return node.files.length ? node.files : null;
+  }
+
   return value;
 }
 
