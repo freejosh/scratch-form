@@ -7,7 +7,7 @@ function setObjectValue(obj, name, value) {
 function getNodeValue(node) {
   const { type, value } = node;
 
-  if (type === 'checkbox') {
+  if (type === 'checkbox' || type === 'radio') {
     return node.checked ? value : undefined;
   }
 
