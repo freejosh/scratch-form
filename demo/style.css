@@ -32,6 +32,10 @@ label {
   display: block;
 }
 
+fieldset {
+  margin-bottom: 10px;
+}
+
 .buttons {
   display: flex;
   gap: 10px;
