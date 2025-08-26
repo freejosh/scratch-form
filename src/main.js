@@ -5,11 +5,18 @@ function setObjectValue(obj, name, value) {
 }
 
 function getNodeValue(node) {
-  if (node.type === 'checkbox') {
-    return node.checked ? node.value : undefined;
+  const { type, value } = node;
+
+  if (type === 'checkbox') {
+    return node.checked ? value : undefined;
   }
 
-  return node.value;
+  // parse numeric input types
+  if (type === 'number' || type === 'range') {
+    return parseFloat(value);
+  }
+
+  return value;
 }
 
 function setNodeValue(node, value) {
