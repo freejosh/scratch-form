@@ -24,7 +24,7 @@ function getNodeValue(node) {
 }
 
 function setNodeValue(node, value) {
-  if (node.type === 'checkbox') {
+  if (node.type === 'checkbox' || node.type === 'radio') {
     node.checked = Boolean(value);
     return;
   }
