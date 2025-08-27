@@ -1,6 +1,43 @@
 const PREFIX = '_sf_';
 
-function setObjectValue(obj, name, value) {
+function parseNamePath(str) {
+  let name = str;
+  let path = [];
+  const i = str.indexOf('[');
+  if (i !== -1) {
+    name = str.slice(0, i);
+    path = str.slice(i + 1, -1).split('][');
+  }
+  path.unshift(name);
+  return path;
+}
+
+function buildNamePath(arr) {
+  const [name, ...path] = arr;
+  if (!path.length) {
+    return name;
+  }
+  return `${name}[${path.join('][')}]`;
+}
+
+function setObjectValue(obj, nameArg, value) {
+  const [name, ...path] = parseNamePath(nameArg);
+
+  if (path.length > 0) {
+    if (!obj[name]) {
+      if (/^[0-9]+$/.test(path[0])) {
+        // path part is numeric - treat as array
+        obj[name] = [];
+      } else {
+        // path part is string
+        obj[name] = {};
+      }
+    }
+
+    setObjectValue(obj[name], buildNamePath(path), value);
+    return;
+  }
+
   obj[name] = value;
 }
 
@@ -66,12 +103,20 @@ function ScratchForm(formElement, options = {}) {
   const proxy = new Proxy(data, handler);
 
   function onNodeChange(node) {
-    const { name } = node;
+    let { name } = node;
     if (!name) {
       return;
     }
 
     const value = getNodeValue(node);
+
+    // `[]` is implied array index - get stable index based on other fields with same name
+    if (name.endsWith('[]')) {
+      const index = Array.from(formElement.querySelectorAll(`[name="${name}"]`))
+        .findIndex((el) => el === node);
+
+      name = `${name.slice(0, -2)}[${index}]`;
+    }
 
     proxy[`${PREFIX}${name}`] = { value, node };
   }
