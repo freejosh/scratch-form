@@ -93,9 +93,17 @@
           </label>
         </fieldset>
 
-        <label>
-          color: <input type="color" name="color" />
-        </label>
+        <fieldset>
+          <legend>
+            colors
+          </legend>
+          <div id="colors">
+            <input type="color" name="colors[]" />
+            <button type="button" id="add-color">+</button>
+            <button type="button" id="remove-color">-</button>
+          </div>
+        </fieldset>
+
         <label>
           file: <input type="file" name="file" />
         </label>
@@ -125,10 +133,14 @@
   <script>
     let data;
 
+    function random(max) {
+      return Math.floor(Math.random() * max);
+    }
+
     let interval;
     function startInterval() {
       interval = setInterval(() => {
-        data.number = Math.floor(Math.random() * data.range);
+        data.number = random(data.range);
       }, data.interval);
     }
     function stopInterval() {
@@ -148,6 +160,19 @@
 
         textarea.value = JSON.stringify(obj, null, 2);
       },
+    });
+
+    document.getElementById('add-color').addEventListener('click', (e) => {
+      const newEl = document.querySelector('[name="colors[]"]').cloneNode();
+      newEl.value = `#${random(255).toString(16).padStart(2, '0')}${random(255).toString(16).padStart(2, '0')}${random(255).toString(16).padStart(2, '0')}`;
+      e.target.parentNode.insertBefore(newEl, e.target);
+    });
+
+    document.getElementById('remove-color').addEventListener('click', () => {
+      const els = document.querySelectorAll('[name="colors[]"]');
+      if (els.length > 1) {
+        els[els.length - 1].remove();
+      }
     });
   </script>
 </body>

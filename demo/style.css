@@ -47,6 +47,13 @@ fieldset fieldset {
   margin-bottom: 10px;
 }
 
+#colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
 .buttons {
   display: flex;
   gap: 10px;
