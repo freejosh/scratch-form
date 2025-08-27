@@ -5,6 +5,7 @@ body {
 
 * {
   font-family: monospace;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -28,11 +29,21 @@ h1 {
 
 }
 
+#intro {
+  resize: vertical;
+  width: 100%;
+  height: 5em;
+}
+
 label {
   display: block;
 }
 
 fieldset {
+  margin: 0;
+}
+
+fieldset fieldset {
   margin-bottom: 10px;
 }
 
