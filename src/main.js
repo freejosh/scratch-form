@@ -79,6 +79,13 @@ function setNodeValue(node, value) {
   node.value = value;
 }
 
+function collectNamedNodes(node, list) {
+  if (node.hasAttribute('name')) {
+    list.push(node);
+  }
+  list.splice(list.length, 0, ...node.querySelectorAll('[name]'));
+}
+
 function ScratchForm(formElement, options = {}) {
   const {
     onChange,
@@ -189,33 +196,45 @@ function ScratchForm(formElement, options = {}) {
 
   // watch for DOM mutations to add/remove data when nodes are added/removed
   const observer = new MutationObserver((mutations) => {
+    // nodes added/removed may not be named fields or may be parent of field nodes - collect
+    // relevant nodes across all mutations in event
+    const removedFields = [];
+    const addedFields = [];
     mutations.forEach(({ addedNodes, removedNodes }) => {
-      removedNodes.forEach((node) => {
-        let { name } = node;
+      removedNodes.forEach((node) => collectNamedNodes(node, removedFields));
+      addedNodes.forEach((node) => collectNamedNodes(node, addedFields));
+    });
 
-        // `[]` is implied array index - get stable index from cache
-        if (name.endsWith('[]')) {
-          const index = getArrayNodeIndex(node);
-          if (index === -1) {
-            return;
-          }
+    removedFields.forEach((node) => {
+      let { name } = node;
 
-          cacheArrayNodes(name);
-          if (this.arrayCache[name].length === 0) {
-            // delete whole array if there are no longer any nodes in cache
-            name = name.slice(0, -2);
-          } else {
-            name = `${name.slice(0, -2)}[${index}]`;
-          }
+      // `[]` is implied array index - get stable index from cache
+      if (name.endsWith('[]')) {
+        const index = getArrayNodeIndex(node);
+        if (index === -1) {
+          return;
         }
 
-        delete proxy[name];
-      });
+        // mutate cache so subsequent loops find correct index after this loop changes the array
+        const cache = this.arrayCache[name];
+        cache.splice(index, 1);
 
-      addedNodes.forEach((node) => {
-        cacheArrayNodes(node.name);
-        onNodeChange(node);
-      });
+        if (cache.length === 0) {
+          // delete whole array if this was the last node in the cache
+          name = name.slice(0, -2);
+        } else {
+          name = `${name.slice(0, -2)}[${index}]`;
+        }
+      }
+
+      delete proxy[name];
+    });
+
+    // rebuild the cache to sync with current DOM nodes
+    cacheArrayNodes();
+
+    addedFields.forEach((node) => {
+      onNodeChange(node);
     });
   });
   observer.observe(formElement, { childList: true, subtree: true });
