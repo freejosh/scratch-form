@@ -137,14 +137,15 @@
       return Math.floor(Math.random() * max);
     }
 
-    let interval;
+    let timeout;
     function startInterval() {
-      interval = setInterval(() => {
+      timeout = setTimeout(() => {
         data.number = random(data.range);
+        startInterval();
       }, data.interval);
     }
     function stopInterval() {
-      clearInterval(interval);
+      clearTimeout(timeout);
     }
 
     const textarea = document.getElementById('data');
