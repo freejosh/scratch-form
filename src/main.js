@@ -201,7 +201,12 @@ function ScratchForm(formElement, options = {}) {
           }
 
           cacheArrayNodes(name);
-          name = `${name.slice(0, -2)}[${index}]`;
+          if (this.arrayCache[name].length === 0) {
+            // delete whole array if there are no longer any nodes in cache
+            name = name.slice(0, -2);
+          } else {
+            name = `${name.slice(0, -2)}[${index}]`;
+          }
         }
 
         delete proxy[name];
