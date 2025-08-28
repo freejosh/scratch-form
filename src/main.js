@@ -20,7 +20,7 @@ function buildNamePath(arr) {
   return `${name}[${path.join('][')}]`;
 }
 
-function setObjectValue(obj, nameArg, value) {
+function setObjectValue(obj, nameArg, value, del = false) {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
@@ -34,7 +34,17 @@ function setObjectValue(obj, nameArg, value) {
       }
     }
 
-    setObjectValue(obj[name], buildNamePath(path), value);
+    setObjectValue(obj[name], buildNamePath(path), value, del);
+    return;
+  }
+
+  if (del) {
+    if (Array.isArray(obj)) {
+      obj.splice(name, 1);
+      return;
+    }
+
+    delete obj[name];
     return;
   }
 
@@ -98,11 +108,46 @@ function ScratchForm(formElement, options = {}) {
 
       return true;
     },
+
+    deleteProperty(obj, name) {
+      setObjectValue(obj, name, undefined, true);
+      onChange(name, undefined, obj);
+      return true;
+    },
   };
 
   const proxy = new Proxy(data, handler);
 
-  function onNodeChange(node) {
+  // maintain a cache of implicit array field names to matching nodes in DOM order, so that we don't
+  // have to reselect them during changes, and can find the old index during removal mutations
+  this.arrayCache = {};
+  const cacheArrayNodes = (name) => {
+    if (name) {
+      this.arrayCache[name] = [];
+    } else {
+      this.arrayCache = {};
+    }
+
+    const query = name ? `[name="${name}"]` : '[name$="[]"]';
+    Array.from(formElement.querySelectorAll(query)).forEach((node) => {
+      let cache = this.arrayCache[node.name];
+      if (!cache) {
+        cache = [];
+        this.arrayCache[node.name] = cache;
+      }
+      cache.push(node);
+    });
+  };
+
+  const getArrayNodeIndex = (node) => {
+    const index = this.arrayCache[node.name].findIndex((el) => el === node);
+    if (index === -1) {
+      console.error(`Could not find index for node: ${node.outerHTML}`);
+    }
+    return index;
+  };
+
+  const onNodeChange = (node) => {
     let { name } = node;
     if (!name) {
       return;
@@ -110,20 +155,24 @@ function ScratchForm(formElement, options = {}) {
 
     const value = getNodeValue(node);
 
-    // `[]` is implied array index - get stable index based on other fields with same name
+    // `[]` is implied array index - get stable index from cache
     if (name.endsWith('[]')) {
-      const index = Array.from(formElement.querySelectorAll(`[name="${name}"]`))
-        .findIndex((el) => el === node);
-
+      const index = getArrayNodeIndex(node);
+      if (index === -1) {
+        return;
+      }
       name = `${name.slice(0, -2)}[${index}]`;
     }
 
     proxy[`${PREFIX}${name}`] = { value, node };
-  }
+  };
 
   function resetData() {
     Array.from(formElement.querySelectorAll('[name]')).forEach(onNodeChange);
   }
+
+  // initialize array node cache
+  cacheArrayNodes();
 
   // initialize with current form values
   resetData();
@@ -137,6 +186,34 @@ function ScratchForm(formElement, options = {}) {
     // wait for form element values to actually change
     setTimeout(resetData, 0);
   });
+
+  // watch for DOM mutations to add/remove data when nodes are added/removed
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach(({ addedNodes, removedNodes }) => {
+      removedNodes.forEach((node) => {
+        let { name } = node;
+
+        // `[]` is implied array index - get stable index from cache
+        if (name.endsWith('[]')) {
+          const index = getArrayNodeIndex(node);
+          if (index === -1) {
+            return;
+          }
+
+          cacheArrayNodes(name);
+          name = `${name.slice(0, -2)}[${index}]`;
+        }
+
+        delete proxy[name];
+      });
+
+      addedNodes.forEach((node) => {
+        cacheArrayNodes(node.name);
+        onNodeChange(node);
+      });
+    });
+  });
+  observer.observe(formElement, { childList: true, subtree: true });
 
   return proxy;
 }
