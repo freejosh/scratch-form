@@ -137,7 +137,7 @@ function ScratchForm(formElement, options = {}) {
     }
 
     const query = name ? `[name="${name}"]` : '[name$="[]"]';
-    Array.from(formElement.querySelectorAll(query)).forEach((node) => {
+    formElement.querySelectorAll(query).forEach((node) => {
       let cache = this.arrayCache[node.name];
       if (!cache) {
         cache = [];
@@ -176,7 +176,7 @@ function ScratchForm(formElement, options = {}) {
   };
 
   function resetData() {
-    Array.from(formElement.querySelectorAll('[name]')).forEach(onNodeChange);
+    formElement.querySelectorAll('[name]').forEach(onNodeChange);
   }
 
   // initialize array node cache
