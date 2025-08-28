@@ -89,6 +89,7 @@ function collectNamedNodes(node, list) {
 function ScratchForm(formElement, options = {}) {
   const {
     onChange,
+    event = 'input',
   } = options;
 
   const data = {};
@@ -185,7 +186,7 @@ function ScratchForm(formElement, options = {}) {
   resetData();
 
   // bind handler to form
-  formElement.addEventListener('change', (e) => {
+  formElement.addEventListener(event, (e) => {
     onNodeChange(e.target);
   });
 
