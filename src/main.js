@@ -129,15 +129,10 @@ function ScratchForm(formElement, options = {}) {
   // maintain a cache of implicit array field names to matching nodes in DOM order, so that we don't
   // have to reselect them during changes, and can find the old index during removal mutations
   this.arrayCache = {};
-  const cacheArrayNodes = (name) => {
-    if (name) {
-      this.arrayCache[name] = [];
-    } else {
-      this.arrayCache = {};
-    }
+  const cacheArrayNodes = () => {
+    this.arrayCache = {};
 
-    const query = name ? `[name="${name}"]` : '[name$="[]"]';
-    formElement.querySelectorAll(query).forEach((node) => {
+    formElement.querySelectorAll('[name$="[]"]').forEach((node) => {
       let cache = this.arrayCache[node.name];
       if (!cache) {
         cache = [];
