@@ -32,3 +32,26 @@ export function collectNamedNodes(node, list) {
   }
   list.splice(list.length, 0, ...node.querySelectorAll('[name]'));
 }
+
+export function cacheArrayNodes(formElement) {
+  const caches = {};
+
+  formElement.querySelectorAll('[name$="[]"]').forEach((node) => {
+    let cache = caches[node.name];
+    if (!cache) {
+      cache = [];
+      caches[node.name] = cache;
+    }
+    cache.push(node);
+  });
+
+  return caches;
+}
+
+export function getArrayNodeIndex(node, caches) {
+  const index = caches[node.name].findIndex((el) => el === node);
+  if (index === -1) {
+    console.error(`Could not find index for node: ${node.outerHTML}`);
+  }
+  return index;
+}

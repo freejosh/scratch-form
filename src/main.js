@@ -1,5 +1,7 @@
 import {
   collectNamedNodes,
+  getArrayNodeIndex,
+  cacheArrayNodes,
   getNodeValue,
   setNodeValue,
 } from './dom';
@@ -49,30 +51,6 @@ function ScratchForm(formElement, options = {}) {
 
   const proxy = new Proxy(data, handler);
 
-  // maintain a cache of implicit array field names to matching nodes in DOM order, so that we don't
-  // have to reselect them during changes, and can find the old index during removal mutations
-  this.arrayCache = {};
-  const cacheArrayNodes = () => {
-    this.arrayCache = {};
-
-    formElement.querySelectorAll('[name$="[]"]').forEach((node) => {
-      let cache = this.arrayCache[node.name];
-      if (!cache) {
-        cache = [];
-        this.arrayCache[node.name] = cache;
-      }
-      cache.push(node);
-    });
-  };
-
-  const getArrayNodeIndex = (node) => {
-    const index = this.arrayCache[node.name].findIndex((el) => el === node);
-    if (index === -1) {
-      console.error(`Could not find index for node: ${node.outerHTML}`);
-    }
-    return index;
-  };
-
   const onNodeChange = (node) => {
     let { name } = node;
     if (!name) {
@@ -83,7 +61,7 @@ function ScratchForm(formElement, options = {}) {
 
     // `[]` is implied array index - get stable index from cache
     if (name.endsWith('[]')) {
-      const index = getArrayNodeIndex(node);
+      const index = getArrayNodeIndex(node, this.arrayCache);
       if (index === -1) {
         return;
       }
@@ -97,8 +75,9 @@ function ScratchForm(formElement, options = {}) {
     formElement.querySelectorAll('[name]').forEach(onNodeChange);
   }
 
-  // initialize array node cache
-  cacheArrayNodes();
+  // maintain a cache of implicit array field names to matching nodes in DOM order, so that we don't
+  // have to reselect them during changes, and can find the old index during removal mutations
+  this.arrayCache = cacheArrayNodes(formElement);
 
   // initialize with current form values
   resetData();
@@ -129,7 +108,7 @@ function ScratchForm(formElement, options = {}) {
 
       // `[]` is implied array index - get stable index from cache
       if (name.endsWith('[]')) {
-        const index = getArrayNodeIndex(node);
+        const index = getArrayNodeIndex(node, this.arrayCache);
         if (index === -1) {
           return;
         }
@@ -150,7 +129,7 @@ function ScratchForm(formElement, options = {}) {
     });
 
     // rebuild the cache to sync with current DOM nodes
-    cacheArrayNodes();
+    this.arrayCache = cacheArrayNodes(formElement);
 
     addedFields.forEach((node) => {
       onNodeChange(node);
