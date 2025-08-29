@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild';
 import { clean } from 'esbuild-plugin-clean';
+import browserslistToEsbuild from 'browserslist-to-esbuild';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -13,6 +14,7 @@ const MAIN_FILE = 'main.js';
     sourcemap: !isProd,
     outdir: BUILD_DIR,
     minify: isProd,
+    target: browserslistToEsbuild('defaults'),
     plugins: [
       clean({
         patterns: [
