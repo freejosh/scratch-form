@@ -33,3 +33,31 @@ export function setObjectValue(obj, nameArg, value, del = false) {
 
   obj[name] = value;
 }
+
+export function getObjectValue(obj, nameArg) {
+  const [name, ...path] = parseNamePath(nameArg);
+
+  if (path.length > 0) {
+    if (!obj[name]) {
+      return undefined;
+    }
+
+    return getObjectValue(obj[name], buildNamePath(path));
+  }
+
+  return obj[name];
+}
+
+export function hasObjectValue(obj, nameArg) {
+  const [name, ...path] = parseNamePath(nameArg);
+
+  if (path.length > 0) {
+    if (!obj[name]) {
+      return false;
+    }
+
+    return hasObjectValue(obj[name], buildNamePath(path));
+  }
+
+  return name in obj;
+}

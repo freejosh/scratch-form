@@ -6,6 +6,8 @@ import {
   setNodeValue,
 } from './dom';
 import {
+  getObjectValue,
+  hasObjectValue,
   setObjectValue,
 } from './object';
 
@@ -19,6 +21,8 @@ function ScratchForm(formElement, options = {}) {
 
   const data = {};
   const handler = {
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy#object_internal_methods
+
     set(obj, rawName, rawValue) {
       let name = rawName;
       let value = rawValue;
@@ -47,6 +51,10 @@ function ScratchForm(formElement, options = {}) {
       onChange(name, undefined, obj);
       return true;
     },
+
+    get: getObjectValue,
+
+    has: hasObjectValue,
   };
 
   const proxy = new Proxy(data, handler);
