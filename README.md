@@ -16,7 +16,7 @@ A small vanilla JavaScript library for two-way form data binding.
 ```js
 const formEl = document.forms['my-form']; // or `getElementById`, etc.
 const data = new ScratchForm(formEl, options); // { field: 'value' }
-data.field = 'new value'; // field element value will sync
+data.field = 'new value'; // <input> element value will sync
 ```
 
 See the demo for a kitchen-sink form that covers most use-cases.
