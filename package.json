@@ -2,7 +2,20 @@
   "name": "scratch-form",
   "version": "0.1.0",
   "author": "Josh Freeman <freejosh@gmail.com>",
-  "private": true,
+  "description": "A small vanilla JavaScript library for two-way form data binding",
+  "keywords": [
+    "form",
+    "html",
+    "front-end",
+    "framework"
+  ],
+  "homepage": "https://github.com/freejosh/scratch-form",
+  "bugs": "https://github.com/freejosh/scratch-form/issues",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freejosh/scratch-form.git"
+  },
   "scripts": {
     "build": "NODE_ENV=production node build.mjs",
     "dev": "node build.mjs"
