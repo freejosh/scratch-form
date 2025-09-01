@@ -1,3 +1,4 @@
+/* global ScratchForm */
 let data;
 
 function random(max) {
