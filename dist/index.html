@@ -12,120 +12,133 @@
     <form id="form">
       <textarea name="intro" id="intro">This library creates a two-way bound object linked to a form. Edit the form values and watch the data change!</textarea>
 
-      <fieldset>
-        <legend>my-form</legend>
+      <input type="hidden" name="hidden-input" value="&#9786;" />
 
-        <input type="hidden" name="hidden-input" value="&#9786;" />
-
-        <fieldset name="random-number">
-          <legend>random number</legend>
-          <label>
-            number: <input type="number" name="number" />
-          </label>
-          <label>
-            range: 0 <input type="range" name="range" min="0" max="1000" /> 1000
-          </label>
+      <fieldset name="random-number">
+        <legend>random number</legend>
         <label>
-          interval:
-          <select name="interval">
-            <option value="100">0.1 seconds</option>
-            <option value="500">0.5 seconds</option>
-            <option value="1000" selected>1 second</option>
-            <option value="2000">2 seconds</option>
-          </select>
+          number: <input type="number" name="number" />
         </label>
-          <label>
-            active: <input type="checkbox" name="toggle" value="on" />
-          </label>
-        </fieldset>
+        <label>
+          range: 0 <input type="range" name="range" min="0" max="1000" /> 1000
+        </label>
+      <label>
+        interval:
+        <select name="interval">
+          <option value="100">0.1 seconds</option>
+          <option value="500">0.5 seconds</option>
+          <option value="1000" selected>1 second</option>
+          <option value="2000">2 seconds</option>
+        </select>
+      </label>
+        <label>
+          active: <input type="checkbox" name="toggle" value="on" />
+        </label>
+      </fieldset>
 
-        <fieldset>
-          <legend>choose one</legend>
-          <label>
-            <input type="radio" name="pokemon" value="bulbasaur" /> bulbasaur
-          </label>
-          <label>
-            <input type="radio" name="pokemon" value="squirtle" /> squirtle
-          </label>
-          <label>
-            <input type="radio" name="pokemon" value="charmander" /> charmander
-          </label>
-        </fieldset>
+      <fieldset>
+        <legend>choose one</legend>
+        <label>
+          <input type="radio" name="pokemon" value="bulbasaur" /> bulbasaur
+        </label>
+        <label>
+          <input type="radio" name="pokemon" value="squirtle" /> squirtle
+        </label>
+        <label>
+          <input type="radio" name="pokemon" value="charmander" /> charmander
+        </label>
+      </fieldset>
 
-        <fieldset>
-          <legend>dates</legend>
-          <label>
-            date: <input type="date" name="dates[date]" />
-          </label>
-          <label>
-            datetime-local: <input type="datetime-local" name="dates[datetime]" />
-          </label>
-          <label>
-            month: <input type="month" name="dates[month]" />
-          </label>
-          <label>
-            week: <input type="week" name="dates[week]" />
-          </label>
-          <label>
-            time: <input type="time" name="dates[time]" />
-          </label>
-        </fieldset>
+      <fieldset>
+        <legend>dates</legend>
+        <label>
+          date: <input type="date" name="dates[date]" />
+        </label>
+        <label>
+          datetime-local: <input type="datetime-local" name="dates[datetime]" />
+        </label>
+        <label>
+          month: <input type="month" name="dates[month]" />
+        </label>
+        <label>
+          week: <input type="week" name="dates[week]" />
+        </label>
+        <label>
+          time: <input type="time" name="dates[time]" />
+        </label>
+      </fieldset>
 
-        <fieldset>
-          <legend>information</legend>
-          <label>
-            first name: <input type="text" name="info[name][first]" />
-          </label>
-          <label>
-            last name: <input type="text" name="info[name][last]" />
-          </label>
-          <label>
-            url: <input type="url" name="info[contact][url]" />
-          </label>
-          <label>
-            email: <input type="email" name="info[contact][email]" />
-          </label>
-          <label>
-            tel: <input type="tel" name="info[contact][tel]" />
-          </label>
-          <label>
-            password: <input type="password" name="info[password]" />
-          </label>
-        </fieldset>
+      <fieldset>
+        <legend>information</legend>
+        <label>
+          first name: <input type="text" name="info[name][first]" />
+        </label>
+        <label>
+          last name: <input type="text" name="info[name][last]" />
+        </label>
+        <label>
+          url: <input type="url" name="info[contact][url]" />
+        </label>
+        <label>
+          email: <input type="email" name="info[contact][email]" />
+        </label>
+        <label>
+          tel: <input type="tel" name="info[contact][tel]" />
+        </label>
+        <label>
+          province:
+          <input list="provinces" name="info[province]" />
+          <datalist id="provinces">
+            <option value="Alberta" />
+            <option value="British Columbia" />
+            <option value="Manitoba" />
+            <option value="New Brunswick" />
+            <option value="Newfoundland and Labrador" />
+            <option value="Northwest Territories" />
+            <option value="Nova Scotia" />
+            <option value="Nunavut" />
+            <option value="Ontario" />
+            <option value="Prince Edward Island" />
+            <option value="Quebec" />
+            <option value="Saskatchewan" />
+            <option value="Yukon" />
+          </datalist>
+        </label>
+        <label>
+          password: <input type="password" name="info[password]" />
+        </label>
+      </fieldset>
 
-        <fieldset>
-          <legend>
-            colors
-          </legend>
-          <div id="colors">
-            <input type="color" name="colors[]" />
-            <button type="button" id="add-color">+</button>
-            <button type="button" id="remove-color">-</button>
-          </div>
-        </fieldset>
+      <fieldset>
+        <legend>
+          colors
+        </legend>
+        <div id="colors">
+          <input type="color" name="colors[]" />
+          <button type="button" id="add-color">+</button>
+          <button type="button" id="remove-color">-</button>
+        </div>
+      </fieldset>
 
+      <fieldset>
+        <legend>
+          and the rest
+        </legend>
         <label>
           file: <input type="file" name="file" />
         </label>
         <label>
           search: <input type="search" name="search" />
         </label>
-        <label>
-          datalist:
-          <input list="data-list" name="list" />
-          <datalist id="data-list">
-            <option value="Option 1" />
-            <option value="Option 2" />
-          </datalist>
-        </label>
-
-        <div class="buttons">
-          <input type="reset" name="reset-buttom" value="reset" />
-          <input type="button" name="button-input" value="button 1" />
-          <button type="button" name="button-element" value="button 2">button 2</button>
-          <input type="submit" name="submit-button" value="submit" />
-        </div>
       </fieldset>
+
+      <div class="buttons">
+        <input type="reset" name="reset-buttom" value="reset" />
+        <input type="button" name="button-input" value="button 1" />
+        <button type="button" name="button-element" value="button 2">button 2</button>
+        <input type="submit" name="submit-button" value="submit" />
+      </div>
+
     </form>
     <textarea id="data" readonly></textarea>
   </div>

@@ -39,11 +39,7 @@ label {
   display: block;
 }
 
-fieldset {
-  margin: 0;
-}
-
-fieldset fieldset {
+fieldset, #intro {
   margin-bottom: 10px;
 }
 
@@ -59,7 +55,7 @@ fieldset fieldset {
   gap: 10px;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 #data {
