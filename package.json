@@ -9,7 +9,7 @@
     "front-end",
     "framework"
   ],
-  "homepage": "https://github.com/freejosh/scratch-form",
+  "homepage": "https://freejosh.github.io/scratch-form/",
   "bugs": "https://github.com/freejosh/scratch-form/issues",
   "license": "MIT",
   "main": "./dist/ScratchForm.js",
