@@ -148,5 +148,4 @@ function ScratchForm(formElement, options = {}) {
   return proxy;
 }
 
-window.ScratchForm = ScratchForm;
-export default ScratchForm;
+module.exports = ScratchForm;

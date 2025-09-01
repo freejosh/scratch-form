@@ -14,6 +14,9 @@ const MAIN_FILE = 'main.js';
     sourcemap: !isProd,
     outdir: BUILD_DIR,
     minify: isProd,
+    platform: 'browser',
+    format: 'iife',
+    globalName: 'ScratchForm',
     target: browserslistToEsbuild('defaults'),
     plugins: [
       clean({
