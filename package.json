@@ -19,13 +19,16 @@
   },
   "scripts": {
     "build": "NODE_ENV=production node build.mjs",
-    "dev": "node build.mjs"
+    "dev": "node build.mjs",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "browserslist": "^4.25.4",
     "browserslist-to-esbuild": "^2.1.1",
     "esbuild": "^0.25.9",
     "esbuild-plugin-clean": "^1.0.1",
-    "esbuild-plugin-umd-wrapper": "^3.0.0"
+    "esbuild-plugin-umd-wrapper": "^3.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4"
   }
 }

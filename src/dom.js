@@ -19,10 +19,12 @@ export function getNodeValue(node) {
 
 export function setNodeValue(node, value) {
   if (node.type === 'checkbox' || node.type === 'radio') {
+    // eslint-disable-next-line no-param-reassign
     node.checked = Boolean(value);
     return;
   }
 
+  // eslint-disable-next-line no-param-reassign
   node.value = value;
 }
 
@@ -51,6 +53,7 @@ export function cacheArrayNodes(formElement) {
 export function getArrayNodeIndex(node, caches) {
   const index = caches[node.name].findIndex((el) => el === node);
   if (index === -1) {
+    // eslint-disable-next-line no-console
     console.error(`Could not find index for node: ${node.outerHTML}`);
   }
   return index;
