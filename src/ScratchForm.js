@@ -106,7 +106,15 @@ function ScratchForm(formElement, options = {}) {
     // relevant nodes across all mutations in event
     const removedFields = [];
     const addedFields = [];
-    mutations.forEach(({ addedNodes, removedNodes }) => {
+    mutations.forEach(({
+      addedNodes,
+      removedNodes,
+      type,
+      target,
+    }) => {
+      if (type === 'attributes') {
+        onNodeChange(target);
+      }
       removedNodes.forEach((node) => collectNamedNodes(node, removedFields));
       addedNodes.forEach((node) => collectNamedNodes(node, addedFields));
     });
@@ -143,7 +151,12 @@ function ScratchForm(formElement, options = {}) {
       onNodeChange(node);
     });
   });
-  observer.observe(formElement, { childList: true, subtree: true });
+  observer.observe(formElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['value'],
+  });
 
   return proxy;
 }
