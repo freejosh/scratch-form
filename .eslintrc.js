@@ -13,5 +13,11 @@ module.exports = {
       files: ['src/ScratchForm.js'],
       rules: { 'import/no-import-module-exports': 0 },
     },
+    {
+      files: ['build.mjs'],
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+      },
+    },
   ],
 };

@@ -1,5 +1,6 @@
 import * as esbuild from 'esbuild';
 import { clean } from 'esbuild-plugin-clean';
+// eslint-disable-next-line import/no-unresolved -- https://github.com/airbnb/javascript/issues/2853
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { umdWrapper } from 'esbuild-plugin-umd-wrapper';
 
