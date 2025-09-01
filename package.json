@@ -12,6 +12,7 @@
   "homepage": "https://github.com/freejosh/scratch-form",
   "bugs": "https://github.com/freejosh/scratch-form/issues",
   "license": "MIT",
+  "main": "./dist/ScratchForm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/freejosh/scratch-form.git"
@@ -24,6 +25,7 @@
     "browserslist": "^4.25.4",
     "browserslist-to-esbuild": "^2.1.1",
     "esbuild": "^0.25.9",
-    "esbuild-plugin-clean": "^1.0.1"
+    "esbuild-plugin-clean": "^1.0.1",
+    "esbuild-plugin-umd-wrapper": "^3.0.0"
   }
 }
