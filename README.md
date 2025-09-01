@@ -7,6 +7,21 @@ A small vanilla JavaScript library for two-way form data binding.
 - No special syntax or classes
 - No dependencies
 
+## Installation
+Include the library directly on your page to access `window.ScratchForm`:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/scratch-form/dist/ScratchForm.js"></script>
+```
+
+or install to your project:
+```
+npm install scratch-form
+```
+```js
+import ScratchForm from 'scratch-form';
+```
+
 ## Usage
 ```html
 <form name="my-form">
@@ -19,7 +34,7 @@ const data = new ScratchForm(formEl, options); // { field: 'value' }
 data.field = 'new value'; // <input> element value will sync
 ```
 
-See the demo for a kitchen-sink form that covers most use-cases.
+See the [demo](https://freejosh.github.io/scratch-form/) for a kitchen-sink form that covers most use-cases.
 
 Deep objects & arrays are accessible like normal (e.g. `data.obj.arr[1]`), and also through accessors using the form name notation (e.g. `data['obj[arr][1]']`). However, to change a deep value you _must_ use form name notation as deep objects & arrays are _not_ bound to the form.
 
