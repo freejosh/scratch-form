@@ -41,14 +41,14 @@ function ScratchForm(formElement, options = {}) {
       }
 
       setObjectValue(obj, name, value);
-      onChange(name, value, obj, node);
+      onChange(name, value, node, obj);
 
       return true;
     },
 
     deleteProperty(obj, name) {
       setObjectValue(obj, name, undefined, true);
-      onChange(name, undefined, obj);
+      onChange(name, undefined, undefined, obj);
       return true;
     },
 

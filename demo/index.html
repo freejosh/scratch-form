@@ -150,7 +150,7 @@
 
     const textarea = document.getElementById('data');
     data = new ScratchForm(document.getElementById('form'), {
-      onChange(name, value, obj, node) {
+      onChange(name, value, node, obj) {
         if (name === 'toggle') {
           if (value) {
             startInterval();
