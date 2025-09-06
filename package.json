@@ -13,6 +13,7 @@
   "bugs": "https://github.com/freejosh/scratch-form/issues",
   "license": "MIT",
   "main": "./dist/ScratchForm.js",
+  "types": "./dist/ScratchForm.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/freejosh/scratch-form.git"
@@ -21,17 +22,22 @@
     "build": "NODE_ENV=production node build.mjs",
     "dev": "node build.mjs",
     "lint": "eslint .",
-    "preversion": "npm run lint",
+    "type-check": "tsc --noEmit",
+    "preversion": "npm run lint && npm run type-check",
     "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
+    "@types/node": "^24.3.1",
     "browserslist": "^4.25.4",
     "browserslist-to-esbuild": "^2.1.1",
     "esbuild": "^0.25.9",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-umd-wrapper": "^3.0.0",
     "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4"
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0"
   }
 }

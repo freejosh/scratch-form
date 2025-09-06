@@ -4,6 +4,8 @@ import {
   cacheArrayNodes,
   getNodeValue,
   setNodeValue,
+  InputFieldElement,
+  ArrayNodeCache,
 } from './dom';
 import {
   getObjectValue,
@@ -13,42 +15,70 @@ import {
 
 const PREFIX = '_sf_';
 
-function ScratchForm(formElement, options = {}) {
+export interface ScratchFormData {
+  [key: string]: unknown;
+}
+
+export interface ScratchFormOptions {
+  onChange?: (
+    name: string,
+    value: unknown,
+    node: InputFieldElement | undefined,
+    obj: ScratchFormData,
+  ) => void;
+  event?: string;
+}
+
+interface ScratchFormConstructor {
+  arrayCache: ArrayNodeCache;
+}
+
+type PrefixedProxyValue = {
+  node: InputFieldElement,
+  value: unknown,
+}
+
+function ScratchForm(
+  this: ScratchFormConstructor,
+  formElement: HTMLFormElement,
+  options: ScratchFormOptions = {},
+): object {
   const {
     onChange,
     event = 'input',
   } = options;
 
-  const data = {};
-  const handler = {
+  const data: ScratchFormData = {};
+  const handler: ProxyHandler<ScratchFormData> = {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy#object_internal_methods
 
     set(obj, rawName, rawValue) {
-      let name = rawName;
+      let name = rawName.toString();
       let value = rawValue;
-      let node;
+      let node: InputFieldElement | undefined;
 
-      if (rawName.startsWith(PREFIX)) {
+      if (name.startsWith(PREFIX)) {
         // change came from form - parse data format
-        name = rawName.slice(PREFIX.length);
-        ({ value, node } = rawValue);
+        name = name.slice(PREFIX.length);
+        ({ value, node } = rawValue as PrefixedProxyValue);
       } else {
         // change came from object - set value on form
-        node = formElement.querySelector(`[name="${name}"]`);
+        node = formElement.querySelector(`[name="${name}"]`) as InputFieldElement || undefined;
         if (node) {
           setNodeValue(node, rawValue);
         }
       }
 
       setObjectValue(obj, name, value);
-      onChange(name, value, node, obj);
+      onChange?.(name, value, node, obj);
 
       return true;
     },
 
-    deleteProperty(obj, name) {
+    deleteProperty(obj, nameArg) {
+      const name = nameArg.toString();
       setObjectValue(obj, name, undefined, true);
-      onChange(name, undefined, undefined, obj);
+      onChange?.(name, undefined, undefined, obj);
       return true;
     },
 
@@ -59,13 +89,13 @@ function ScratchForm(formElement, options = {}) {
 
   const proxy = new Proxy(data, handler);
 
-  const onNodeChange = (node) => {
-    let { name } = node;
+  const onNodeChange = (node: Element) => {
+    let name = node.getAttribute('name');
     if (!name) {
       return;
     }
 
-    const value = getNodeValue(node);
+    const value = getNodeValue(node as InputFieldElement);
 
     // `[]` is implied array index - get stable index from cache
     if (name.endsWith('[]')) {
@@ -91,8 +121,8 @@ function ScratchForm(formElement, options = {}) {
   resetData();
 
   // bind handler to form
-  formElement.addEventListener(event, (e) => {
-    onNodeChange(e.target);
+  formElement.addEventListener(event, (e: Event) => {
+    onNodeChange(e.target as Element);
   });
 
   formElement.addEventListener('reset', () => {
@@ -104,8 +134,8 @@ function ScratchForm(formElement, options = {}) {
   const observer = new MutationObserver((mutations) => {
     // nodes added/removed may not be named fields or may be parent of field nodes - collect
     // relevant nodes across all mutations in event
-    const removedFields = [];
-    const addedFields = [];
+    const removedFields: Element[] = [];
+    const addedFields: Element[] = [];
     mutations.forEach(({
       addedNodes,
       removedNodes,
@@ -113,14 +143,17 @@ function ScratchForm(formElement, options = {}) {
       target,
     }) => {
       if (type === 'attributes') {
-        onNodeChange(target);
+        onNodeChange(target as Element);
       }
-      removedNodes.forEach((node) => collectNamedNodes(node, removedFields));
-      addedNodes.forEach((node) => collectNamedNodes(node, addedFields));
+      removedNodes.forEach((node) => collectNamedNodes(node as Element, removedFields));
+      addedNodes.forEach((node) => collectNamedNodes(node as Element, addedFields));
     });
 
     removedFields.forEach((node) => {
-      let { name } = node;
+      let name = node.getAttribute('name');
+      if (!name) {
+        return;
+      }
 
       // `[]` is implied array index - get stable index from cache
       if (name.endsWith('[]')) {
@@ -161,4 +194,5 @@ function ScratchForm(formElement, options = {}) {
   return proxy;
 }
 
+// must use module.exports for bundler to set main function as global
 module.exports = ScratchForm;

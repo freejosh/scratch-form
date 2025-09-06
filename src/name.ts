@@ -1,6 +1,6 @@
-export function parseNamePath(str) {
+export function parseNamePath(str: string): string[] {
   let name = str;
-  let path = [];
+  let path: string[] = [];
   const i = str.indexOf('[');
   if (i !== -1) {
     name = str.slice(0, i);
@@ -10,7 +10,7 @@ export function parseNamePath(str) {
   return path;
 }
 
-export function buildNamePath(arr) {
+export function buildNamePath(arr: string[]): string {
   const [name, ...path] = arr;
   if (!path.length) {
     return name;

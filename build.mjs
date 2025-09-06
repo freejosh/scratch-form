@@ -11,7 +11,7 @@ const LIB_NAME = 'ScratchForm';
 
 (async () => {
   const options = {
-    entryPoints: [`./src/${LIB_NAME}.js`],
+    entryPoints: [`./src/${LIB_NAME}.ts`],
     bundle: true,
     sourcemap: !isProd,
     outfile: `${BUILD_DIR}/${LIB_NAME}.js`,
@@ -23,7 +23,7 @@ const LIB_NAME = 'ScratchForm';
     plugins: [
       clean({
         patterns: [
-          `${BUILD_DIR}/${LIB_NAME}*`,
+          `${BUILD_DIR}/*`,
         ],
       }),
       umdWrapper({

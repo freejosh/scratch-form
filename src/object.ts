@@ -3,7 +3,7 @@ import {
   parseNamePath,
 } from './name';
 
-export function setObjectValue(obj, nameArg, value, del = false) {
+export function setObjectValue(obj: any, nameArg: string, value: unknown, del = false): void {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
@@ -25,7 +25,11 @@ export function setObjectValue(obj, nameArg, value, del = false) {
 
   if (del) {
     if (Array.isArray(obj)) {
-      obj.splice(name, 1);
+      const index = parseInt(name, 10);
+      if (Number.isNaN(index)) {
+        return;
+      }
+      obj.splice(index, 1);
       return;
     }
 
@@ -38,7 +42,7 @@ export function setObjectValue(obj, nameArg, value, del = false) {
   obj[name] = value;
 }
 
-export function getObjectValue(obj, nameArg) {
+export function getObjectValue(obj: any, nameArg: string): unknown {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
@@ -52,7 +56,7 @@ export function getObjectValue(obj, nameArg) {
   return obj[name];
 }
 
-export function hasObjectValue(obj, nameArg) {
+export function hasObjectValue(obj: any, nameArg: string): boolean {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
