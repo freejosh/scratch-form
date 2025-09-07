@@ -29,17 +29,8 @@ export interface ScratchFormOptions {
   event?: string;
 }
 
-interface ScratchFormConstructor {
-  arrayCache: ArrayNodeCache;
-}
-
-type PrefixedProxyValue = {
-  node: InputFieldElement,
-  value: unknown,
-}
-
 function ScratchForm(
-  this: ScratchFormConstructor,
+  this: { arrayCache: ArrayNodeCache },
   formElement: HTMLFormElement,
   options: ScratchFormOptions = {},
 ): object {
@@ -60,7 +51,7 @@ function ScratchForm(
       if (name.startsWith(PREFIX)) {
         // change came from form - parse data format
         name = name.slice(PREFIX.length);
-        ({ value, node } = rawValue as PrefixedProxyValue);
+        ({ value, node } = rawValue as { value: unknown, node: InputFieldElement });
       } else {
         // change came from object - set value on form
         node = formElement.querySelector(`[name="${name}"]`) as InputFieldElement || undefined;
