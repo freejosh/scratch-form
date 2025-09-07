@@ -3,7 +3,14 @@ import {
   parseNamePath,
 } from './name';
 
-export function setObjectValue(obj: any, nameArg: string, value: unknown, del = false): void {
+type ObjectLike = Record<string, unknown>;
+
+export function setObjectValue(
+  obj: ObjectLike,
+  nameArg: string,
+  value: unknown,
+  del = false,
+): void {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
@@ -19,7 +26,7 @@ export function setObjectValue(obj: any, nameArg: string, value: unknown, del = 
       }
     }
 
-    setObjectValue(obj[name], buildNamePath(path), value, del);
+    setObjectValue(obj[name] as ObjectLike, buildNamePath(path), value, del);
     return;
   }
 
@@ -42,7 +49,7 @@ export function setObjectValue(obj: any, nameArg: string, value: unknown, del = 
   obj[name] = value;
 }
 
-export function getObjectValue(obj: any, nameArg: string): unknown {
+export function getObjectValue(obj: ObjectLike, nameArg: string): unknown {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
@@ -50,13 +57,13 @@ export function getObjectValue(obj: any, nameArg: string): unknown {
       return undefined;
     }
 
-    return getObjectValue(obj[name], buildNamePath(path));
+    return getObjectValue(obj[name] as ObjectLike, buildNamePath(path));
   }
 
   return obj[name];
 }
 
-export function hasObjectValue(obj: any, nameArg: string): boolean {
+export function hasObjectValue(obj: ObjectLike, nameArg: string): boolean {
   const [name, ...path] = parseNamePath(nameArg);
 
   if (path.length > 0) {
@@ -64,7 +71,7 @@ export function hasObjectValue(obj: any, nameArg: string): boolean {
       return false;
     }
 
-    return hasObjectValue(obj[name], buildNamePath(path));
+    return hasObjectValue(obj[name] as ObjectLike, buildNamePath(path));
   }
 
   return name in obj;
