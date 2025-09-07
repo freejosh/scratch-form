@@ -17,7 +17,7 @@ module.exports = {
     },
   },
   ignorePatterns: [
-    'dist/ScratchForm.js',
+    'dist/*',
   ],
   overrides: [
     {
