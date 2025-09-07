@@ -1,4 +1,9 @@
-export type InputFieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+export type InputFieldElement = (
+  HTMLInputElement
+  | HTMLSelectElement
+  | HTMLTextAreaElement
+  | HTMLButtonElement
+);
 
 type NodeValue = string | number | undefined | FileList | null;
 export function getNodeValue(node: InputFieldElement): NodeValue {
