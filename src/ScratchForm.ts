@@ -30,7 +30,6 @@ export interface ScratchFormOptions {
 }
 
 function ScratchForm(
-  this: { arrayCache: ArrayNodeCache },
   formElement: HTMLFormElement,
   options: ScratchFormOptions = {},
 ): object {
@@ -39,7 +38,9 @@ function ScratchForm(
     event = 'input',
   } = options;
 
+  let arrayCache: ArrayNodeCache = {};
   const data: ScratchFormData = {};
+
   const handler: ProxyHandler<ScratchFormData> = {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy#object_internal_methods
 
@@ -90,7 +91,7 @@ function ScratchForm(
 
     // `[]` is implied array index - get stable index from cache
     if (name.endsWith('[]')) {
-      const index = getArrayNodeIndex(node, this.arrayCache);
+      const index = getArrayNodeIndex(node, arrayCache);
       if (index === -1) {
         return;
       }
@@ -106,7 +107,7 @@ function ScratchForm(
 
   // maintain a cache of implicit array field names to matching nodes in DOM order, so that we don't
   // have to reselect them during changes, and can find the old index during removal mutations
-  this.arrayCache = cacheArrayNodes(formElement);
+  arrayCache = cacheArrayNodes(formElement);
 
   // initialize with current form values
   resetData();
@@ -148,13 +149,13 @@ function ScratchForm(
 
       // `[]` is implied array index - get stable index from cache
       if (name.endsWith('[]')) {
-        const index = getArrayNodeIndex(node, this.arrayCache);
+        const index = getArrayNodeIndex(node, arrayCache);
         if (index === -1) {
           return;
         }
 
         // mutate cache so subsequent loops find correct index after this loop changes the array
-        const cache = this.arrayCache[name];
+        const cache = arrayCache[name];
         cache.splice(index, 1);
 
         if (cache.length === 0) {
@@ -169,7 +170,7 @@ function ScratchForm(
     });
 
     // rebuild the cache to sync with current DOM nodes
-    this.arrayCache = cacheArrayNodes(formElement);
+    arrayCache = cacheArrayNodes(formElement);
 
     addedFields.forEach((node) => {
       onNodeChange(node);
