@@ -1,12 +1,14 @@
 declare module 'scratch-form/ScratchForm' {
   import { InputFieldElement } from 'scratch-form/dom';
-  export interface ScratchFormData {
+  interface ScratchFormData {
       [key: string]: unknown;
   }
-  export interface ScratchFormOptions {
+  interface ScratchFormOptions {
       onChange?: (name: string, value: unknown, node: InputFieldElement | undefined, obj: ScratchFormData) => void;
       event?: string;
   }
+  function ScratchForm(formElement: HTMLFormElement, options?: ScratchFormOptions): object;
+  export default ScratchForm;
 
 }
 declare module 'scratch-form/dom' {

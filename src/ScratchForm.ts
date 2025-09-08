@@ -15,11 +15,11 @@ import {
 
 const PREFIX = '_sf_';
 
-export interface ScratchFormData {
+interface ScratchFormData {
   [key: string]: unknown;
 }
 
-export interface ScratchFormOptions {
+interface ScratchFormOptions {
   onChange?: (
     name: string,
     value: unknown,
@@ -186,5 +186,6 @@ function ScratchForm(
   return proxy;
 }
 
+export default ScratchForm;
 // must use module.exports for bundler to set main function as global
 module.exports = ScratchForm;
