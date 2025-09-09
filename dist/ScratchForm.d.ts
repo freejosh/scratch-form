@@ -12,11 +12,9 @@ declare module 'scratch-form/dom' {
 }
 declare module 'scratch-form/index' {
   import { InputFieldElement } from 'scratch-form/dom';
-  interface ScratchFormData {
-      [key: string]: unknown;
-  }
+  import { DataObject } from 'scratch-form/object';
   interface ScratchFormOptions {
-      onChange?: (name: string, value: unknown, node: InputFieldElement | undefined, obj: ScratchFormData) => void;
+      onChange?: (name: string, value: unknown, node: InputFieldElement | undefined, obj: DataObject) => void;
       event?: string;
   }
   function ScratchForm(formElement: HTMLFormElement, options?: ScratchFormOptions): object;
@@ -29,11 +27,12 @@ declare module 'scratch-form/name' {
 
 }
 declare module 'scratch-form/object' {
-  type ObjectLike = Record<string, unknown>;
-  export function setObjectValue(obj: ObjectLike, nameArg: string, value: unknown, del?: boolean): void;
-  export function getObjectValue(obj: ObjectLike, nameArg: string): unknown;
-  export function hasObjectValue(obj: ObjectLike, nameArg: string): boolean;
-  export {};
+  export interface DataObject {
+      [key: string]: unknown;
+  }
+  export function setObjectValue(obj: DataObject, nameArg: string, value: unknown, del?: boolean): void;
+  export function getObjectValue(obj: DataObject, nameArg: string): unknown;
+  export function hasObjectValue(obj: DataObject, nameArg: string): boolean;
 
 }
 declare module 'scratch-form' {
