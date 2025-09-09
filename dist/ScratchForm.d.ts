@@ -1,9 +1,9 @@
 declare module 'scratch-form/dom' {
   export type InputFieldElement = (HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLButtonElement);
-  type NodeValue = string | number | undefined | FileList | null;
-  export function getNodeValue(node: InputFieldElement): NodeValue;
+  type FieldValue = string | number | undefined | FileList | null;
+  export function getNodeValue(node: Node): FieldValue;
   export function setNodeValue(node: InputFieldElement, value: unknown): void;
-  export function collectNamedNodes(node: Element, list: Element[]): void;
+  export function collectNamedNodes(node: Node, list: Element[]): void;
   export type ArrayNodeCache = Record<string, Element[]>;
   export function cacheArrayNodes(formElement: HTMLFormElement): ArrayNodeCache;
   export function getArrayNodeIndex(node: Element, caches: ArrayNodeCache): number;

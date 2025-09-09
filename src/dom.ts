@@ -5,9 +5,9 @@ export type InputFieldElement = (
   | HTMLButtonElement
 );
 
-type NodeValue = string | number | undefined | FileList | null;
-export function getNodeValue(node: InputFieldElement): NodeValue {
-  const { type, value } = node;
+type FieldValue = string | number | undefined | FileList | null;
+export function getNodeValue(node: Node): FieldValue {
+  const { type, value } = node as InputFieldElement;
 
   if (type === 'checkbox' || type === 'radio') {
     return (node as HTMLInputElement).checked ? value : undefined;
@@ -37,7 +37,10 @@ export function setNodeValue(node: InputFieldElement, value: unknown): void {
   node.value = String(value);
 }
 
-export function collectNamedNodes(node: Element, list: Element[]): void {
+export function collectNamedNodes(node: Node, list: Element[]): void {
+  if (!(node instanceof Element)) {
+    return;
+  }
   if (node.hasAttribute('name')) {
     list.push(node);
   }

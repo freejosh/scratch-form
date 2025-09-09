@@ -78,13 +78,16 @@ function ScratchForm(
 
   const proxy = new Proxy(data, handler);
 
-  const onNodeChange = (node: Element) => {
+  const onNodeChange = (node: Node | EventTarget | null) => {
+    if (!node || !(node instanceof Element)) {
+      return;
+    }
     let name = node.getAttribute('name');
     if (!name) {
       return;
     }
 
-    const value = getNodeValue(node as InputFieldElement);
+    const value = getNodeValue(node);
 
     // `[]` is implied array index - get stable index from cache
     if (name.endsWith('[]')) {
@@ -111,7 +114,7 @@ function ScratchForm(
 
   // bind handler to form
   formElement.addEventListener(event, (e: Event) => {
-    onNodeChange(e.target as Element);
+    onNodeChange(e.target);
   });
 
   formElement.addEventListener('reset', () => {
@@ -132,10 +135,10 @@ function ScratchForm(
       target,
     }) => {
       if (type === 'attributes') {
-        onNodeChange(target as Element);
+        onNodeChange(target);
       }
-      removedNodes.forEach((node) => collectNamedNodes(node as Element, removedFields));
-      addedNodes.forEach((node) => collectNamedNodes(node as Element, addedFields));
+      removedNodes.forEach((node) => collectNamedNodes(node, removedFields));
+      addedNodes.forEach((node) => collectNamedNodes(node, addedFields));
     });
 
     removedFields.forEach((node) => {
