@@ -36,6 +36,7 @@ module.exports = {
       rules: {
         'import/no-import-module-exports': 0,
         'import/extensions': 0,
+        '@typescript-eslint/no-non-null-assertion': 'error',
       },
     },
   ],

@@ -50,10 +50,14 @@ export function cacheArrayNodes(formElement: HTMLFormElement): ArrayNodeCache {
   const caches: ArrayNodeCache = {};
 
   formElement.querySelectorAll('[name$="[]"]').forEach((node) => {
-    let cache = caches[node.getAttribute('name')!];
+    const name = node.getAttribute('name');
+    if (!name) {
+      return;
+    }
+    let cache = caches[name];
     if (!cache) {
       cache = [];
-      caches[node.getAttribute('name')!] = cache;
+      caches[name] = cache;
     }
     cache.push(node);
   });
@@ -62,8 +66,11 @@ export function cacheArrayNodes(formElement: HTMLFormElement): ArrayNodeCache {
 }
 
 export function getArrayNodeIndex(node: Element, caches: ArrayNodeCache): number {
-  const name = node.getAttribute('name')!;
-  const index = caches[name].findIndex((el) => el === node);
+  const name = node.getAttribute('name');
+  let index = -1;
+  if (name) {
+    index = caches[name].findIndex((el) => el === node);
+  }
   if (index === -1) {
     // eslint-disable-next-line no-console
     console.error(`Could not find index for node: ${node.outerHTML}`);
