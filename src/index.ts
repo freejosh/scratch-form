@@ -11,20 +11,17 @@ import {
   getObjectValue,
   hasObjectValue,
   setObjectValue,
+  DataObject,
 } from './object';
 
 const PREFIX = '_sf_';
-
-interface ScratchFormData {
-  [key: string]: unknown;
-}
 
 interface ScratchFormOptions {
   onChange?: (
     name: string,
     value: unknown,
     node: InputFieldElement | undefined,
-    obj: ScratchFormData,
+    obj: DataObject,
   ) => void;
   event?: string;
 }
@@ -39,9 +36,9 @@ function ScratchForm(
   } = options;
 
   let arrayCache: ArrayNodeCache = {};
-  const data: ScratchFormData = {};
+  const data: DataObject = {};
 
-  const handler: ProxyHandler<ScratchFormData> = {
+  const handler: ProxyHandler<DataObject> = {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy#object_internal_methods
 
     set(obj, rawName, rawValue) {
