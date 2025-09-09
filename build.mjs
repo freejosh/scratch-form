@@ -11,11 +11,9 @@ const SRC_DIR = './src';
 const BUILD_DIR = './dist';
 const LIB_NAME = 'ScratchForm';
 
-const ENTRY_FILE = `${SRC_DIR}/${LIB_NAME}.ts`;
-
 (async () => {
   const options = {
-    entryPoints: [ENTRY_FILE],
+    entryPoints: [`${SRC_DIR}/index.ts`],
     bundle: true,
     sourcemap: !isProd,
     outfile: `${BUILD_DIR}/${LIB_NAME}.js`,
@@ -40,7 +38,6 @@ const ENTRY_FILE = `${SRC_DIR}/${LIB_NAME}.ts`;
     await esbuild.build(options);
 
     new TypeGenerator.Generator({
-      entry: ENTRY_FILE,
       output: `${BUILD_DIR}/${LIB_NAME}.d.ts`,
     }).generate();
   } else {

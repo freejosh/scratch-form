@@ -1,16 +1,3 @@
-declare module 'scratch-form/ScratchForm' {
-  import { InputFieldElement } from 'scratch-form/dom';
-  interface ScratchFormData {
-      [key: string]: unknown;
-  }
-  interface ScratchFormOptions {
-      onChange?: (name: string, value: unknown, node: InputFieldElement | undefined, obj: ScratchFormData) => void;
-      event?: string;
-  }
-  function ScratchForm(formElement: HTMLFormElement, options?: ScratchFormOptions): object;
-  export default ScratchForm;
-
-}
 declare module 'scratch-form/dom' {
   export type InputFieldElement = (HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLButtonElement);
   type NodeValue = string | number | undefined | FileList | null;
@@ -21,6 +8,19 @@ declare module 'scratch-form/dom' {
   export function cacheArrayNodes(formElement: HTMLFormElement): ArrayNodeCache;
   export function getArrayNodeIndex(node: Element, caches: ArrayNodeCache): number;
   export {};
+
+}
+declare module 'scratch-form/index' {
+  import { InputFieldElement } from 'scratch-form/dom';
+  interface ScratchFormData {
+      [key: string]: unknown;
+  }
+  interface ScratchFormOptions {
+      onChange?: (name: string, value: unknown, node: InputFieldElement | undefined, obj: ScratchFormData) => void;
+      event?: string;
+  }
+  function ScratchForm(formElement: HTMLFormElement, options?: ScratchFormOptions): object;
+  export default ScratchForm;
 
 }
 declare module 'scratch-form/name' {
@@ -37,6 +37,6 @@ declare module 'scratch-form/object' {
 
 }
 declare module 'scratch-form' {
-  import main = require('scratch-form/src/ScratchForm');
+  import main = require('scratch-form/index');
   export = main;
 }
