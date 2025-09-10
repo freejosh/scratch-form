@@ -1,6 +1,6 @@
 {
   "name": "scratch-form",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Josh Freeman <freejosh@gmail.com>",
   "description": "A small vanilla JavaScript library for two-way form data binding",
   "keywords": [
